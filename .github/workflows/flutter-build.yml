@@ -18,6 +18,11 @@ on:
 # in this file!
 
 env:
+  # Свой ID/relay-сервер и его публичный ключ. Подставляются в
+  # libs/hbb_common/src/config.rs через option_env! на этапе компиляции.
+  # Значения задаются секретами репозитория, в код не коммитятся.
+  RD_SERVER: ${{ secrets.RD_SERVER }}
+  RD_KEY: ${{ secrets.RD_KEY }}
   SCITER_RUST_VERSION: "1.75" # https://github.com/rustdesk/rustdesk/discussions/7503, also 1.78 has ABI change which causes our sciter version not working, https://blog.rust-lang.org/2024/03/30/i128-layout-update.html
   RUST_VERSION: "1.75" # sciter failed on m1 with 1.78 because of https://blog.rust-lang.org/2024/03/30/i128-layout-update.html
   MAC_RUST_VERSION: "1.81" # 1.81 is requred for macos, because of https://github.com/yury/cidre requires 1.81
