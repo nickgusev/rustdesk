@@ -1,10 +1,13 @@
 ﻿<!--
 This file contains the declaration of all the localizable strings.
 -->
-<WixLocalization Culture="en-us" Codepage="1252"
+<!-- Codepage 1251 (кириллица), а не 1252: видимое имя продукта и
+     производитель заданы по-русски, и в 1252 они не представимы — WiX
+     падает с WIX0311. -->
+<WixLocalization Culture="en-us" Codepage="1251"
 	xmlns="http://wixtoolset.org/schemas/v4/wxl">
 
-	<String Id="SummaryCodepage" Value="1252" />
+	<String Id="SummaryCodepage" Value="1251" />
 	<String Id="ProductLanguage" Value="1033" />
 
 	<!-- General strings -->
