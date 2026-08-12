@@ -4,7 +4,10 @@
 
 	<?include Includes.wxi?>
 
-	<Package Name="$(var.DisplayName)" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" Language="!(loc.ProductLanguage)" UpgradeCode="$(var.UpgradeCode)" Scope="perMachine">
+	<!-- Codepage 1251 обязателен: имя продукта и производитель заданы
+	     по-русски. Без этого атрибута WiX берёт 1252 и падает с WIX0311,
+	     причём Codepage из WixLocalization на базу MSI не влияет. -->
+	<Package Name="$(var.DisplayName)" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" Language="!(loc.ProductLanguage)" Codepage="1251" UpgradeCode="$(var.UpgradeCode)" Scope="perMachine">
 
 		<SummaryInformation Keywords="Installer" Description="$(var.Description)" Codepage="!(loc.SummaryCodepage)" />
 
