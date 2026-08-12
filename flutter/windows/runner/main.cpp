@@ -80,6 +80,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
         command_line_arguments.end());
   }
 
+  // Display name for the window title and for finding an already running
+  // instance. The internal APP_NAME must stay ASCII (it is used for the exe
+  // name, the Windows service name and the URI scheme), so the visible name
+  // is a separate string. Written with \u escapes to stay independent of the
+  // source file encoding: "SoyuzMash Rossii" in Cyrillic.
+  const std::wstring display_name =
+      L"\u0421\u043E\u044E\u0437\u041C\u0430\u0448 \u0420\u043E\u0441\u0441\u0438\u0438";
+
   std::wstring app_name = L"RustDesk";
   FUNC_RUSTDESK_GET_APP_NAME get_rustdesk_app_name = (FUNC_RUSTDESK_GET_APP_NAME)GetProcAddress(hInstance, "get_rustdesk_app_name");
   if (get_rustdesk_app_name) {
@@ -90,7 +98,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   }
 
   // Uri links dispatch
-  HWND hwnd = ::FindWindowW(getWindowClassName(), app_name.c_str());
+  HWND hwnd = ::FindWindowW(getWindowClassName(), display_name.c_str());
   if (hwnd != NULL) {
     // Allow multiple flutter instances when being executed by parameters
     // contained in whitelists.
@@ -161,11 +169,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   std::wstring window_title;
   if (is_cm_page) {
-    window_title = app_name + L" - Connection Manager";
+    window_title = display_name + L" - Connection Manager";
   } else if (is_install_page) {
-    window_title = app_name + L" - Install";
+    window_title = display_name + L" - Install";
   } else {
-    window_title = app_name;
+    window_title = display_name;
   }
   if (!window.CreateAndShow(window_title, origin, size, !is_cm_page)) {
       return EXIT_FAILURE;

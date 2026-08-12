@@ -87,21 +87,23 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040904e4"
+        BLOCK "041904b0"
         BEGIN
-            VALUE "CompanyName", "Purslane Tech Pte. Ltd." "\0"
-            VALUE "FileDescription", "RustDesk Remote Desktop" "\0"
+            VALUE "CompanyName", "ООО «СоюзМаш России»" "\0"
+            VALUE "FileDescription", "СоюзМаш России — удалённый доступ" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "rustdesk" "\0"
-            VALUE "LegalCopyright", "Copyright © 2026 Purslane Tech Pte. Ltd. All rights reserved." "\0"
-            VALUE "OriginalFilename", "rustdesk.exe" "\0"
-            VALUE "ProductName", "RustDesk" "\0"
+            VALUE "InternalName", "SoyuzMash" "\0"
+            VALUE "LegalCopyright", "Copyright © 2026 ООО «СоюзМаш России». Based on RustDesk (AGPL-3.0)." "\0"
+            VALUE "OriginalFilename", "SoyuzMash.exe" "\0"
+            VALUE "ProductName", "СоюзМаш России" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x409, 1252
+        // 0x419 = русский, 0x04b0 = 1200 (Unicode): кодовая страница 1252
+        // не представляет кириллицу и портит строки выше.
+        VALUE "Translation", 0x419, 0x04b0
     END
 END
 

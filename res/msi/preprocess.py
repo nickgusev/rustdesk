@@ -76,6 +76,15 @@ def make_parser():
         "--app-name", type=str, default="RustDesk", help="The app name."
     )
     parser.add_argument(
+        "--display-name",
+        type=str,
+        default="СоюзМаш России",
+        help="Visible product name for Add/Remove Programs and the installer UI. "
+        "Defaults to --app-name. Unlike --app-name it is never used as a file, "
+        "folder or registry key name, so it may contain spaces and non-ASCII "
+        "characters.",
+    )
+    parser.add_argument(
         "-v", "--version", type=str, default="", help="The app version."
     )
     parser.add_argument(
@@ -85,7 +94,7 @@ def make_parser():
         "-m",
         "--manufacturer",
         type=str,
-        default="Purslane Tech Pte. Ltd.",
+        default="ООО «СоюзМаш России»",
         help="The app manufacturer.",
     )
     return parser
@@ -150,6 +159,11 @@ def gen_auto_component(app_name, dist_dir):
     )
 
 
+def display_name(args):
+    """Видимое имя продукта. По умолчанию совпадает с --app-name."""
+    return args.display_name or args.app_name
+
+
 def gen_pre_vars(args, dist_dir):
     def func(lines, index_start):
         upgrade_code = uuid.uuid5(uuid.NAMESPACE_OID, app_name + ".exe")
@@ -159,7 +173,10 @@ def gen_pre_vars(args, dist_dir):
             f'{indent}<?define Version="{g_version}" ?>\n',
             f'{indent}<?define Manufacturer="{args.manufacturer}" ?>\n',
             f'{indent}<?define Product="{args.app_name}" ?>\n',
-            f'{indent}<?define Description="{args.app_name} Installer" ?>\n',
+            # Product задаёт имена папок, ключей реестра и exe, поэтому остаётся
+            # ASCII. DisplayName используется только там, где имя видит человек.
+            f'{indent}<?define DisplayName="{display_name(args)}" ?>\n',
+            f'{indent}<?define Description="{display_name(args)} Installer" ?>\n',
             f'{indent}<?define ProductLower="{args.app_name.lower()}" ?>\n',
             f'{indent}<?define RegKeyRoot=".$(var.ProductLower)" ?>\n',
             f'{indent}<?define RegKeyInstall="$(var.RegKeyRoot)\\Install" ?>\n',
@@ -311,7 +328,7 @@ def gen_custom_ARPSYSTEMCOMPONENT_True(args, dist_dir):
             f"{indent}<!--https://learn.microsoft.com/en-us/windows/win32/msi/property-reference-->\n"
         )
         lines_new.append(
-            f'{indent}<RegistryValue Type="string" Name="DisplayName" Value="{args.app_name}" />\n'
+            f'{indent}<RegistryValue Type="string" Name="DisplayName" Value="{display_name(args)}" />\n'
         )
         lines_new.append(
             f'{indent}<RegistryValue Type="string" Name="DisplayIcon" Value="[INSTALLFOLDER_INNER]{args.app_name}.exe" />\n'
